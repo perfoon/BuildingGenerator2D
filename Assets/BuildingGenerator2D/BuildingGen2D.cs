@@ -70,6 +70,25 @@ namespace BuildingGen2D
             }
         }
 
+		public void AddRectangleSprite(GameObject gameObject, Color32 color, int width, int height) {
+			
+			Texture2D texture = new Texture2D(width, height, TextureFormat.RGB24, false, true);
+			texture.filterMode = FilterMode.Point;
+			texture.wrapMode = TextureWrapMode.Clamp;
+			Color32[] pixels = texture.GetPixels32();
+			for (int i=0; i<pixels.Length; i++) {
+				pixels[i] = color;
+			}
+			texture.SetPixels32(pixels);
+			texture.Apply();
+
+			Sprite newSprite = Sprite.Create(texture, new Rect(0f, 0f, texture.width, texture.height), new Vector2(0.5f, 0.5f),128f);
+
+			gameObject.AddComponent<SpriteRenderer>();
+			SpriteRenderer sprRenderer = gameObject.GetComponent<SpriteRenderer>();
+			sprRenderer.sprite = newSprite;
+		}
+
 		public void GenerateBuilding() {
 
 			if (m_building == null || GameObject.Find (m_building.name) == null) {
@@ -98,6 +117,9 @@ namespace BuildingGen2D
 			}
 
 			Debug.Log ("Building thingy!");
+
+			GameObject go2 = new GameObject("Wall");
+			AddRectangleSprite(go2, new Color32(135, 128, 128, 255), 256, 256);
 		}
     }
 }
