@@ -27,6 +27,13 @@ namespace BuildingGen2D
             //EditorGUILayout.PropertyField(this.serializedObject.FindProperty("m_Texture"), new GUIContent("Atlas Texture"));
             //EditorGUILayout.Space();
             spriteListSelector.RenderEditor();
+
+			m_BuildingGen.MinLength = EditorGUILayout.IntSlider("Min Length", m_BuildingGen.MinLength, 1, 10);
+			m_BuildingGen.MaxLength = EditorGUILayout.IntSlider("Max Length", m_BuildingGen.MaxLength, 1, 10);
+
+			if (m_BuildingGen.MaxLength < m_BuildingGen.MinLength)
+				m_BuildingGen.MaxLength = m_BuildingGen.MinLength;
+
 			if(GUILayout.Button("Generate building"))
 			{
 				m_BuildingGen.GenerateBuilding();

@@ -13,6 +13,9 @@ namespace BuildingGen2D
         [SerializeField]
         private List<STSpriteInfo> m_Sprites = new List<STSpriteInfo>();
 
+		public int MinLength { get; set; }
+		public int MaxLength { get; set; }
+
         public List<STSpriteInfo> Sprites
         {
             get
@@ -31,6 +34,11 @@ namespace BuildingGen2D
                 return list;
             }
         }
+
+		public BuildingGen2D() {
+			MinLength = 1;
+			MaxLength = 1;
+		}
 
         public void RemoveSprite(STSpriteInfo info)
         {
