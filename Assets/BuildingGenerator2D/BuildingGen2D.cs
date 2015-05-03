@@ -72,17 +72,25 @@ namespace BuildingGen2D
 
 		public void GenerateBuilding() {
 
-			if (m_building == null || GameObject.Find(m_building.name) == null) {
-				m_building = new GameObject("Building");
+			if (m_building == null || GameObject.Find (m_building.name) == null) {
+				m_building = new GameObject ("Building");
+			} else {
+				GameObject.DestroyImmediate (GameObject.Find (m_building.name));
+				Debug.Log ("deleted gameobject ");
+				m_building = new GameObject ("Building");
 			}
 
-			GameObject go = new GameObject("Test");
+			int random_length = Random.Range (MinLength, MaxLength + 1);
+			for (int i = 0; i < random_length; i++) {
 
-			go.transform.parent = m_building.transform;
-			SpriteRenderer renderer = go.AddComponent<SpriteRenderer>();
-			int random = Random.Range (0, m_Sprites.Count);
-			renderer.sprite = m_Sprites[random].target;
-			//Instantiate(m_Sprites[0].target);
+				GameObject go = new GameObject("Ground_" + i);
+				go.transform.position = new Vector3(i, 0, 0);
+				go.transform.parent = m_building.transform;
+				SpriteRenderer renderer = go.AddComponent<SpriteRenderer>();
+				int random = Random.Range (0, m_Sprites.Count);
+				renderer.sprite = m_Sprites[random].target;
+			}
+
 			Debug.Log ("Building thingy!");
 		}
     }
