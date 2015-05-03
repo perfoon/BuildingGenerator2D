@@ -12,6 +12,7 @@ namespace BuildingGen2D
     {
         [SerializeField]
         private List<STSpriteInfo> m_Sprites = new List<STSpriteInfo>();
+		private GameObject m_building;
 
 		public int MinLength { get; set; }
 		public int MaxLength { get; set; }
@@ -70,9 +71,17 @@ namespace BuildingGen2D
         }
 
 		public void GenerateBuilding() {
+
+			if (m_building == null || GameObject.Find(m_building.name) == null) {
+				m_building = new GameObject("Building");
+			}
+
 			GameObject go = new GameObject("Test");
+
+			go.transform.parent = m_building.transform;
 			SpriteRenderer renderer = go.AddComponent<SpriteRenderer>();
-			renderer.sprite = m_Sprites[0].target;
+			int random = Random.Range (0, m_Sprites.Count);
+			renderer.sprite = m_Sprites[random].target;
 			//Instantiate(m_Sprites[0].target);
 			Debug.Log ("Building thingy!");
 		}
