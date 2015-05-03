@@ -85,6 +85,12 @@ namespace BuildingGen2D
 
 				GameObject go = new GameObject("Ground_" + i);
 				go.transform.position = new Vector3(i, 0, 0);
+				//to flip it or not decision
+				int posNeg = Random.Range (0, 2);
+				if (posNeg == 0) {
+					go.transform.localScale = new Vector3(-1,1,1);
+				} 
+
 				go.transform.parent = m_building.transform;
 				SpriteRenderer renderer = go.AddComponent<SpriteRenderer>();
 				int random = Random.Range (0, m_Sprites.Count);
