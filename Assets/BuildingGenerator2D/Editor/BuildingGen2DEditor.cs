@@ -27,6 +27,10 @@ namespace BuildingGen2D
             //EditorGUILayout.PropertyField(this.serializedObject.FindProperty("m_Texture"), new GUIContent("Atlas Texture"));
             //EditorGUILayout.Space();
             spriteListSelector.RenderEditor();
+			if(GUILayout.Button("Generate building"))
+			{
+				m_BuildingGen.GenerateBuilding();
+			}
         }
 
         [MenuItem("Assets/Create/Building Generator 2D")]

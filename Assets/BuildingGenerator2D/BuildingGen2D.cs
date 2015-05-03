@@ -60,5 +60,13 @@ namespace BuildingGen2D
                 this.AddSprite(resource);
             }
         }
+
+		public void GenerateBuilding() {
+			GameObject go = new GameObject("Test");
+			SpriteRenderer renderer = go.AddComponent<SpriteRenderer>();
+			renderer.sprite = m_Sprites[0].target;
+			//Instantiate(m_Sprites[0].target);
+			Debug.Log ("Building thingy!");
+		}
     }
 }
