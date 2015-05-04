@@ -115,7 +115,7 @@ namespace BuildingGen2D
 
 		public void GenerateBuilding() {
 
-			if (m_GroundSprites.Count != 0) {
+			if (m_GroundSprites.Count != 0 && m_RoofSprites.Count != 0) {
 				if (m_building == null || GameObject.Find (m_building.name) == null) {
 					m_building = new GameObject ("Building");
 				} else {
@@ -127,6 +127,9 @@ namespace BuildingGen2D
 				int random_height = Random.Range (MinHeight, MaxHeight + 1);
 				//Ground generation
 				GenerateGround(random_length);
+
+				//Roof generation
+				GenerateRoof(random_length, random_height);
 
 				//Building wall generation
 				GameObject go2 = new GameObject("Wall");
@@ -144,7 +147,7 @@ namespace BuildingGen2D
 		}
 
 		public void GenerateGround(int random_length) {
-			Debug.Log ("rooofe" + m_RoofSprites.Count);
+
 			for (int i = 0; i < random_length; i++) {
 				
 				GameObject go = new GameObject ("Ground_" + i);
@@ -162,6 +165,26 @@ namespace BuildingGen2D
 				renderer.sprite = m_GroundSprites [random].target;
 			}
 		
+		}
+
+		public void GenerateRoof(int random_length, int building_height) {
+
+			for (int i = 0; i < random_length; i++) {
+				
+				GameObject go3 = new GameObject ("Roof_" + i);
+				float x_transformed_beginning = random_length /  -2.0f + 0.5f;
+				go3.transform.position = new Vector3 (x_transformed_beginning + i, building_height, 0);
+				go3.transform.localScale = new Vector3 (-1, 3, 1);
+				 
+				
+				go3.transform.parent = m_building.transform;
+				SpriteRenderer renderer = go3.AddComponent<SpriteRenderer> ();
+				int random = Random.Range (0, m_RoofSprites.Count);
+				renderer.sprite = m_RoofSprites [random].target;
+
+				Debug.Log ("Roofe" + random_length);
+			}
+			
 		}
     }
 }
