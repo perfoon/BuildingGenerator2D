@@ -169,7 +169,20 @@ namespace BuildingGen2D
 
 		public void GenerateRoof(int random_length, int building_height) {
 
-			for (int i = 0; i < random_length; i++) {
+			GameObject go3 = new GameObject ("Roof_0");
+
+			go3.transform.position = new Vector3 (0, building_height, 0);
+			float scaleX = random_length - random_length * 0.15f;
+			go3.transform.localScale = new Vector3 (scaleX, 3, 1);
+			
+			
+			go3.transform.parent = m_building.transform;
+			SpriteRenderer renderer = go3.AddComponent<SpriteRenderer> ();
+			int random = Random.Range (0, m_RoofSprites.Count);
+			renderer.sprite = m_RoofSprites [random].target;
+
+			
+			/*for (int i = 0; i < random_length; i++) {
 				
 				GameObject go3 = new GameObject ("Roof_" + i);
 				float x_transformed_beginning = random_length /  -2.0f + 0.5f;
@@ -183,7 +196,7 @@ namespace BuildingGen2D
 				renderer.sprite = m_RoofSprites [random].target;
 
 				Debug.Log ("Roofe" + random_length);
-			}
+			}*/
 			
 		}
     }
