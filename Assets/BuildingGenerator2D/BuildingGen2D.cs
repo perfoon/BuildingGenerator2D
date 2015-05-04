@@ -121,8 +121,7 @@ namespace BuildingGen2D
 				GameObject go2 = new GameObject("Wall");
 				go2.transform.position = new Vector3 (0, random_height/2.0f, 0);
 				go2.transform.parent = m_building.transform;
-				AddRectangleSprite(go2, new Color32(90, 84, 76, 255), new Color32(53, 47, 45, 255), 1, random_length * 128, 256);
-				AddRectangleSprite(go2, new Color32(135, 128, 128, 255), new Color32(100, 90, 90, 255), 1, random_length * 128, random_height * 128);
+                AddRectangleSprite(go2, new Color32(90, 84, 76, 255), new Color32(53, 47, 45, 255), 1, random_length * 128, random_height * 128);
 				
 			} else {
 				Debug.Log ("No Sprites Added!! Try Again!");
