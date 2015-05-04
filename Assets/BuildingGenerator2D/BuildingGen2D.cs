@@ -100,25 +100,15 @@ namespace BuildingGen2D
 					Debug.Log ("deleted gameobject ");
 					m_building = new GameObject ("Building");
 				}
-
-
-
 				int random_length = Random.Range (MinLength, MaxLength + 1);
-				for (int i = 0; i < random_length; i++) {
-					
-					GameObject go = new GameObject ("Ground_" + i);
-					go.transform.position = new Vector3 (i, 0, 0);
-					//to flip it or not decision
-					int posNeg = Random.Range (0, 2);
-					if (posNeg == 0) {
-						go.transform.localScale = new Vector3 (-1, 1, 1);
-					} 
-					
-					go.transform.parent = m_building.transform;
-					SpriteRenderer renderer = go.AddComponent<SpriteRenderer> ();
-					int random = Random.Range (0, m_Sprites.Count);
-					renderer.sprite = m_Sprites [random].target;
-				}
+				//Ground generation
+				GenerateGround(random_length);
+
+				//Building wall generation
+				GameObject go2 = new GameObject("Wall");
+				go2.transform.position = new Vector3 (0, 1, 0);
+				go2.transform.parent = m_building.transform;
+				AddRectangleSprite(go2, new Color32(135, 128, 128, 255), random_length * 128 , 256);
 				
 			} else {
 				Debug.Log ("No Sprites Added!! Try Again!");
@@ -127,6 +117,27 @@ namespace BuildingGen2D
 
 			GameObject go2 = new GameObject("Wall");
 			AddRectangleSprite(go2, new Color32(135, 128, 128, 255), new Color32(100, 90, 90, 255), 1, 256, 256);
+		}
+
+		public void GenerateGround(int random_length) {
+
+			for (int i = 0; i < random_length; i++) {
+				
+				GameObject go = new GameObject ("Ground_" + i);
+				float x_transformed_beginning = random_length /  -2.0f + 0.5f;
+				go.transform.position = new Vector3 (x_transformed_beginning + i, 0, 0);
+				//to flip it or not decision
+				int posNeg = Random.Range (0, 2);
+				if (posNeg == 0) {
+					go.transform.localScale = new Vector3 (-1, 1, 1);
+				} 
+				
+				go.transform.parent = m_building.transform;
+				SpriteRenderer renderer = go.AddComponent<SpriteRenderer> ();
+				int random = Random.Range (0, m_Sprites.Count);
+				renderer.sprite = m_Sprites [random].target;
+			}
+		
 		}
     }
 }
