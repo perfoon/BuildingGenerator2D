@@ -11,7 +11,8 @@ namespace BuildingGen2D
     public class BuildingGen2D : ScriptableObject
     {
         [SerializeField]
-        private List<STSpriteInfo> m_Sprites = new List<STSpriteInfo>();
+        private List<STSpriteInfo> m_GroundSprites = new List<STSpriteInfo>();
+		private List<STSpriteInfo> m_RoofSprites = new List<STSpriteInfo>();
 		private GameObject m_building;
 
 		public int MinLength { get; set; }
@@ -21,20 +22,28 @@ namespace BuildingGen2D
 		public int MaxHeight { get; set; }
 
 
-        public List<STSpriteInfo> Sprites
+        public List<STSpriteInfo> GroundSprites
         {
             get
             {
-                return this.m_Sprites;
+                return this.m_GroundSprites;
             }
         }
 
-        public List<STSpriteInfo> copyOfSprites
-        {
-            get
+		public List<STSpriteInfo> RoofSprites
+		{
+			get
+			{
+				return this.m_RoofSprites;
+			}
+		}
+		
+		public List<STSpriteInfo> copyOfGroundSprites
+		{
+			get
             {
                 List<STSpriteInfo> list = new List<STSpriteInfo>();
-                foreach (STSpriteInfo i in this.m_Sprites)
+                foreach (STSpriteInfo i in this.m_GroundSprites)
                     list.Add(i);
                 return list;
             }
@@ -43,14 +52,16 @@ namespace BuildingGen2D
 		public BuildingGen2D() {
 			MinLength = 1;
 			MaxLength = 1;
+			MinHeight = 1;
+			MaxHeight = 1;
 		}
 
-        public void RemoveSprite(STSpriteInfo info)
+        public void RemoveGroundSprite(STSpriteInfo info)
         {
-            m_Sprites.Remove(info);
+            m_GroundSprites.Remove(info);
         }
 
-        public void AddSprite(Object resource)
+        public void AddGroundSprite(Object resource)
         {
             if (resource is Texture2D || resource is Sprite)
             {
@@ -62,15 +73,15 @@ namespace BuildingGen2D
                     info.target = resource as Sprite;
                 }
 
-                this.Sprites.Add(info);
+                this.GroundSprites.Add(info);
             }
         }
 
-        public void AddSprites(Object[] resources)
+        public void AddGroundSprites(Object[] resources)
         {
             foreach (Object resource in resources)
             {
-                this.AddSprite(resource);
+                this.AddGroundSprite(resource);
             }
         }
 
@@ -104,7 +115,7 @@ namespace BuildingGen2D
 
 		public void GenerateBuilding() {
 
-			if (m_Sprites.Count != 0) {
+			if (m_GroundSprites.Count != 0) {
 				if (m_building == null || GameObject.Find (m_building.name) == null) {
 					m_building = new GameObject ("Building");
 				} else {
@@ -133,7 +144,7 @@ namespace BuildingGen2D
 		}
 
 		public void GenerateGround(int random_length) {
-
+			Debug.Log ("rooofe" + m_RoofSprites.Count);
 			for (int i = 0; i < random_length; i++) {
 				
 				GameObject go = new GameObject ("Ground_" + i);
@@ -147,8 +158,8 @@ namespace BuildingGen2D
 				
 				go.transform.parent = m_building.transform;
 				SpriteRenderer renderer = go.AddComponent<SpriteRenderer> ();
-				int random = Random.Range (0, m_Sprites.Count);
-				renderer.sprite = m_Sprites [random].target;
+				int random = Random.Range (0, m_GroundSprites.Count);
+				renderer.sprite = m_GroundSprites [random].target;
 			}
 		
 		}

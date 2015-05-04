@@ -11,14 +11,19 @@ namespace BuildingGen2D
         private BuildingGen2D m_BuildingGen;
 
         //Editor components
-        private STSpriteListSelector spriteListSelector;
+        private STSpriteListSelector groundSpriteListSelector;
+		private STSpriteListSelector roofSpriteListSelector;
+
 
         protected void OnEnable()
         {
             m_BuildingGen = this.target as BuildingGen2D;
 
-            spriteListSelector = ScriptableObject.CreateInstance(typeof(STSpriteListSelector)) as STSpriteListSelector;
-            spriteListSelector.Init("Ground sprites", m_BuildingGen.Sprites);
+            groundSpriteListSelector = ScriptableObject.CreateInstance(typeof(STSpriteListSelector)) as STSpriteListSelector;
+            groundSpriteListSelector.Init("Ground sprites", m_BuildingGen.GroundSprites);
+
+			roofSpriteListSelector = ScriptableObject.CreateInstance(typeof(STSpriteListSelector)) as STSpriteListSelector;
+			roofSpriteListSelector.Init("Roof sprites", m_BuildingGen.RoofSprites);
         }
 
         public override void OnInspectorGUI()
@@ -26,7 +31,8 @@ namespace BuildingGen2D
             this.serializedObject.Update();
             //EditorGUILayout.PropertyField(this.serializedObject.FindProperty("m_Texture"), new GUIContent("Atlas Texture"));
             //EditorGUILayout.Space();
-            spriteListSelector.RenderEditor();
+            groundSpriteListSelector.RenderEditor();
+			roofSpriteListSelector.RenderEditor();
 
 			m_BuildingGen.MinLength = EditorGUILayout.IntSlider("Min Length", m_BuildingGen.MinLength, 1, 10);
 			m_BuildingGen.MaxLength = EditorGUILayout.IntSlider("Max Length", m_BuildingGen.MaxLength, 1, 10);
