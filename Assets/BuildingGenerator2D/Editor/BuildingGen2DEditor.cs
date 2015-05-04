@@ -34,6 +34,12 @@ namespace BuildingGen2D
 			if (m_BuildingGen.MaxLength < m_BuildingGen.MinLength)
 				m_BuildingGen.MaxLength = m_BuildingGen.MinLength;
 
+			m_BuildingGen.MinHeight = EditorGUILayout.IntSlider("Min Heigth", m_BuildingGen.MinHeight, 1, 10);
+			m_BuildingGen.MaxHeight = EditorGUILayout.IntSlider("Max Heigth", m_BuildingGen.MaxHeight, 1, 10);
+			
+			if (m_BuildingGen.MaxHeight < m_BuildingGen.MinHeight)
+				m_BuildingGen.MaxHeight = m_BuildingGen.MinHeight;
+
 			if(GUILayout.Button("Generate building"))
 			{
 				m_BuildingGen.GenerateBuilding();

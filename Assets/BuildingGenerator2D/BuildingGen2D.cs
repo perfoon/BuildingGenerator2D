@@ -17,6 +17,10 @@ namespace BuildingGen2D
 		public int MinLength { get; set; }
 		public int MaxLength { get; set; }
 
+		public int MinHeight { get; set; }
+		public int MaxHeight { get; set; }
+
+
         public List<STSpriteInfo> Sprites
         {
             get
@@ -101,14 +105,15 @@ namespace BuildingGen2D
 					m_building = new GameObject ("Building");
 				}
 				int random_length = Random.Range (MinLength, MaxLength + 1);
+				int random_height = Random.Range (MinHeight, MaxHeight + 1);
 				//Ground generation
 				GenerateGround(random_length);
 
 				//Building wall generation
 				GameObject go2 = new GameObject("Wall");
-				go2.transform.position = new Vector3 (0, 1, 0);
+				go2.transform.position = new Vector3 (0, random_height/2.0f, 0);
 				go2.transform.parent = m_building.transform;
-				AddRectangleSprite(go2, new Color32(135, 128, 128, 255), new Color32(100, 90, 90, 255), 1, random_length * 128, 256);
+				AddRectangleSprite(go2, new Color32(135, 128, 128, 255), new Color32(100, 90, 90, 255), 1, random_length * 128, random_height * 128);
 				
 			} else {
 				Debug.Log ("No Sprites Added!! Try Again!");
