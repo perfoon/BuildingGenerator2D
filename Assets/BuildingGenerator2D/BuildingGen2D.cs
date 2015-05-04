@@ -70,7 +70,8 @@ namespace BuildingGen2D
             }
         }
 
-		public void AddRectangleSprite(GameObject gameObject, Color32 color, int width, int height) {
+        public void AddRectangleSprite(GameObject gameObject, Color32 color, Color32 borderColor, int borderWidth, int width, int height)
+        {
 			
 			Texture2D texture = new Texture2D(width, height, TextureFormat.RGB24, false, true);
 			texture.filterMode = FilterMode.Point;
@@ -125,7 +126,7 @@ namespace BuildingGen2D
 			Debug.Log ("Building thingy!");
 
 			GameObject go2 = new GameObject("Wall");
-			AddRectangleSprite(go2, new Color32(135, 128, 128, 255), 256, 256);
+			AddRectangleSprite(go2, new Color32(135, 128, 128, 255), new Color32(100, 90, 90, 255), 1, 256, 256);
 		}
     }
 }
