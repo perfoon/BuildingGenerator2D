@@ -91,31 +91,37 @@ namespace BuildingGen2D
 
 		public void GenerateBuilding() {
 
-			if (m_building == null || GameObject.Find (m_building.name) == null) {
-				m_building = new GameObject ("Building");
+			if (m_Sprites.Count != 0) {
+				if (m_building == null || GameObject.Find (m_building.name) == null) {
+					m_building = new GameObject ("Building");
+				} else {
+					GameObject.DestroyImmediate (GameObject.Find (m_building.name));
+					Debug.Log ("deleted gameobject ");
+					m_building = new GameObject ("Building");
+				}
+
+
+
+				int random_length = Random.Range (MinLength, MaxLength + 1);
+				for (int i = 0; i < random_length; i++) {
+					
+					GameObject go = new GameObject ("Ground_" + i);
+					go.transform.position = new Vector3 (i, 0, 0);
+					//to flip it or not decision
+					int posNeg = Random.Range (0, 2);
+					if (posNeg == 0) {
+						go.transform.localScale = new Vector3 (-1, 1, 1);
+					} 
+					
+					go.transform.parent = m_building.transform;
+					SpriteRenderer renderer = go.AddComponent<SpriteRenderer> ();
+					int random = Random.Range (0, m_Sprites.Count);
+					renderer.sprite = m_Sprites [random].target;
+				}
+				
 			} else {
-				GameObject.DestroyImmediate (GameObject.Find (m_building.name));
-				Debug.Log ("deleted gameobject ");
-				m_building = new GameObject ("Building");
+				Debug.Log ("No Sprites Added!! Try Again!");
 			}
-
-			int random_length = Random.Range (MinLength, MaxLength + 1);
-			for (int i = 0; i < random_length; i++) {
-
-				GameObject go = new GameObject("Ground_" + i);
-				go.transform.position = new Vector3(i, 0, 0);
-				//to flip it or not decision
-				int posNeg = Random.Range (0, 2);
-				if (posNeg == 0) {
-					go.transform.localScale = new Vector3(-1,1,1);
-				} 
-
-				go.transform.parent = m_building.transform;
-				SpriteRenderer renderer = go.AddComponent<SpriteRenderer>();
-				int random = Random.Range (0, m_Sprites.Count);
-				renderer.sprite = m_Sprites[random].target;
-			}
-
 			Debug.Log ("Building thingy!");
 
 			GameObject go2 = new GameObject("Wall");
