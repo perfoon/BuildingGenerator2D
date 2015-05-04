@@ -108,15 +108,15 @@ namespace BuildingGen2D
 				GameObject go2 = new GameObject("Wall");
 				go2.transform.position = new Vector3 (0, 1, 0);
 				go2.transform.parent = m_building.transform;
-				AddRectangleSprite(go2, new Color32(135, 128, 128, 255), random_length * 128 , 256);
+				AddRectangleSprite(go2, new Color32(135, 128, 128, 255), new Color32(100, 90, 90, 255), 1, random_length * 128, 256);
 				
 			} else {
 				Debug.Log ("No Sprites Added!! Try Again!");
 			}
 			Debug.Log ("Building thingy!");
 
-			GameObject go2 = new GameObject("Wall");
-			AddRectangleSprite(go2, new Color32(135, 128, 128, 255), new Color32(100, 90, 90, 255), 1, 256, 256);
+
+
 		}
 
 		public void GenerateGround(int random_length) {
