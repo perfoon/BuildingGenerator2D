@@ -13,6 +13,7 @@ namespace BuildingGen2D
         [SerializeField]
         private List<STSpriteInfo> m_GroundSprites = new List<STSpriteInfo>();
 		private List<STSpriteInfo> m_RoofSprites = new List<STSpriteInfo>();
+		private List<STSpriteInfo> m_WindowSprites = new List<STSpriteInfo>();
 		private GameObject m_building;
 
 		public int MinLength { get; set; }
@@ -37,6 +38,14 @@ namespace BuildingGen2D
 			get
 			{
 				return this.m_RoofSprites;
+			}
+		}
+
+		public List<STSpriteInfo> WindowSprites
+		{
+			get
+			{
+				return this.m_WindowSprites;
 			}
 		}
 		
@@ -117,7 +126,7 @@ namespace BuildingGen2D
 
 		public void GenerateBuilding() {
 
-			if (m_GroundSprites.Count != 0 && m_RoofSprites.Count != 0) {
+			if (m_GroundSprites.Count != 0 && m_RoofSprites.Count != 0 && m_WindowSprites.Count != 0) {
 				if (m_building == null || GameObject.Find (m_building.name) == null) {
 					m_building = new GameObject ("Building");
 				} else {

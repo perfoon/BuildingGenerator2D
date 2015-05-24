@@ -13,6 +13,7 @@ namespace BuildingGen2D
         //Editor components
         private STSpriteListSelector groundSpriteListSelector;
 		private STSpriteListSelector roofSpriteListSelector;
+		private STSpriteListSelector windowSpriteListSelector;
 
 
         protected void OnEnable()
@@ -24,6 +25,9 @@ namespace BuildingGen2D
 
 			roofSpriteListSelector = ScriptableObject.CreateInstance(typeof(STSpriteListSelector)) as STSpriteListSelector;
 			roofSpriteListSelector.Init("Roof sprites", m_BuildingGen.RoofSprites);
+
+			windowSpriteListSelector = ScriptableObject.CreateInstance(typeof(STSpriteListSelector)) as STSpriteListSelector;
+			windowSpriteListSelector.Init("Window sprites", m_BuildingGen.WindowSprites);
         }
 
         public override void OnInspectorGUI()
@@ -33,6 +37,7 @@ namespace BuildingGen2D
             //EditorGUILayout.Space();
             groundSpriteListSelector.RenderEditor();
 			roofSpriteListSelector.RenderEditor();
+			windowSpriteListSelector.RenderEditor();
 
 			m_BuildingGen.MinLength = EditorGUILayout.IntSlider("Min Width", m_BuildingGen.MinLength, 1, 10);
 			m_BuildingGen.MaxLength = EditorGUILayout.IntSlider("Max Width", m_BuildingGen.MaxLength, 1, 10);
