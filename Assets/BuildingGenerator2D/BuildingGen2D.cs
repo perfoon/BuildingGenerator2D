@@ -2,6 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using ST;
+using AssemblyCSharp;
+
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -142,6 +145,10 @@ namespace BuildingGen2D
 				//Roof generation
 				GenerateRoof(random_length, random_height);
 
+				//maja fassaad
+				Blueprint aknad = new Blueprint("windows",m_WindowSprites);
+				GenerateWalls( aknad, random_length, random_height);
+
 				//Building wall generation
 				GameObject go2 = new GameObject("Wall");
 				go2.transform.position = new Vector3 (0, random_height/2.0f, 0);
@@ -182,9 +189,9 @@ namespace BuildingGen2D
 
 			int random = Random.Range (0, m_RoofSprites.Count);
 			Sprite roofSprite = m_RoofSprites [random].target;
+
 			//creating new texture from the sprite(this texture is exactly the size of the image, not 128x128)
 			Texture2D source = spriteToTexture (roofSprite);
-
 			int sourceHeight = source.height;
 			int sourceWidth = source.width;
 
@@ -237,6 +244,31 @@ namespace BuildingGen2D
 			source.SetPixels(newColors);
 			source.Apply();
 			return source;
+		}
+
+		public void GenerateWalls( Blueprint bp,int building_width, int building_height) {
+			List<BlueprintObject> Objects = bp.getBlueprintObjects();
+			int objCount = Objects.Count;//bp.getBlueprintObjects.Count
+			for (int i = 0; i <  objCount; i++) {
+				Debug.Log ("-- testing" +bp.Type +"   x " + Objects[i].X + " y " + Objects[i].Y);
+				GameObject go = new GameObject (bp.Type + "_" + i);
+				SpriteRenderer renderer = go.AddComponent<SpriteRenderer> ();
+				renderer.sprite = Objects[i].Sprite;
+				float leftUpperCornerX = -building_width /2f;
+				float leftUpperCornerY = building_height *1f;
+				float objX = leftUpperCornerX + Objects[i].X*onePixelUnit; 
+				float objY = leftUpperCornerY - Objects[i].Y*onePixelUnit;
+				go.transform.position = new Vector3 (objX, objY, 0);
+				go.transform.parent = m_building.transform;
+				/*
+				float x_transformed_beginning = random_length /  -2.0f + 0.5f;
+
+				
+
+
+				int random = Random.Range (0, m_GroundSprites.Count);
+				;*/
+			}
 		}
     }
 }
