@@ -169,7 +169,8 @@ namespace BuildingGen2D
 
 		public void GenerateRoof(int random_length, int building_height) {
 
-			GameObject go3 = new GameObject ("Roof_0");
+			/*
+			 * GameObject go3 = new GameObject ("Roof_0");
 
 			go3.transform.position = new Vector3 (0, building_height, 0);
 			float scaleX = random_length - random_length * 0.15f;
@@ -179,9 +180,37 @@ namespace BuildingGen2D
 			go3.transform.parent = m_building.transform;
 			SpriteRenderer renderer = go3.AddComponent<SpriteRenderer> ();
 			int random = Random.Range (0, m_RoofSprites.Count);
-			renderer.sprite = m_RoofSprites [random].target;
 
-			
+			renderer.sprite = m_RoofSprites [random].target;
+*/
+			//proovin pilti loigata
+			int random = Random.Range (0, m_RoofSprites.Count);
+			Sprite roofSprite = m_RoofSprites [random].target;
+			//creating new texture from the sprite(this texture is exactly the size of the image, not 128x128)
+			Texture2D source = new Texture2D((int)roofSprite.rect.width,(int)m_RoofSprites [random].target.rect.height); 
+			source.filterMode = FilterMode.Point; //makes it into pixels. Basically same as TextureFormat truecolor
+
+			Color[] newColors = m_RoofSprites [random].target.texture.GetPixels((int)roofSprite.rect.x, 
+			                                                                    (int)roofSprite.rect.y, 
+			                                                                    (int)roofSprite.rect.width, 
+			                                                                    (int)roofSprite.rect.height);
+
+			source.SetPixels(newColors);
+			source.Apply();
+
+			int sourceHeight = source.height;
+			int sourceWidth = source.width;
+			//Debug.Log ("Roofe " + newText.height);
+			//Important!! in Rect the values start form the bottom left corner
+			Sprite newSprite = Sprite.Create(source, new Rect(0f, 0f, sourceWidth / 2f, sourceHeight), new Vector2(1f, 1f));
+
+			GameObject go3 = new GameObject ("Roof_0");
+			SpriteRenderer renderer = go3.AddComponent<SpriteRenderer> ();
+			renderer.sprite = newSprite;
+			go3.transform.position = new Vector3 (0, building_height+0.04f, 0);
+			go3.transform.localScale = new Vector3 (2, 2, 1);
+			go3.transform.parent = m_building.transform;
+
 			/*for (int i = 0; i < random_length; i++) {
 				
 				GameObject go3 = new GameObject ("Roof_" + i);
