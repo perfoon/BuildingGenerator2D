@@ -34,8 +34,8 @@ namespace BuildingGen2D
             groundSpriteListSelector.RenderEditor();
 			roofSpriteListSelector.RenderEditor();
 
-			m_BuildingGen.MinLength = EditorGUILayout.IntSlider("Min Length", m_BuildingGen.MinLength, 1, 10);
-			m_BuildingGen.MaxLength = EditorGUILayout.IntSlider("Max Length", m_BuildingGen.MaxLength, 1, 10);
+			m_BuildingGen.MinLength = EditorGUILayout.IntSlider("Min Width", m_BuildingGen.MinLength, 1, 10);
+			m_BuildingGen.MaxLength = EditorGUILayout.IntSlider("Max Width", m_BuildingGen.MaxLength, 1, 10);
 
 			if (m_BuildingGen.MaxLength < m_BuildingGen.MinLength)
 				m_BuildingGen.MaxLength = m_BuildingGen.MinLength;

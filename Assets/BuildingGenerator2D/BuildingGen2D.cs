@@ -20,6 +20,8 @@ namespace BuildingGen2D
 
 		public int MinHeight { get; set; }
 		public int MaxHeight { get; set; }
+		public static float pixelsPerUnit = 100f;
+		public float onePixelUnit = 1f / pixelsPerUnit;
 
 
         public List<STSpriteInfo> GroundSprites
@@ -92,7 +94,7 @@ namespace BuildingGen2D
 			texture.filterMode = FilterMode.Point;
 			texture.wrapMode = TextureWrapMode.Clamp;
 			Color32[] pixels = texture.GetPixels32();
-			for (int i=0; i < pixels.Length; i++) {
+			for (int i = 0; i < pixels.Length; i++) {
                 if (i <= width * borderWidth || i >= width * height - width * borderWidth
                     || (i % width) < borderWidth || (i % width) >= width - borderWidth)
                 {
@@ -167,30 +169,17 @@ namespace BuildingGen2D
 		
 		}
 
-		public void GenerateRoof(int random_length, int building_height) {
+		public void GenerateRoof(int building_width, int building_height) {
 
-			/*
-			 * GameObject go3 = new GameObject ("Roof_0");
 
-			go3.transform.position = new Vector3 (0, building_height, 0);
-			float scaleX = random_length - random_length * 0.15f;
-			go3.transform.localScale = new Vector3 (scaleX, 3, 1);
-			
-			
-			go3.transform.parent = m_building.transform;
-			SpriteRenderer renderer = go3.AddComponent<SpriteRenderer> ();
-			int random = Random.Range (0, m_RoofSprites.Count);
-
-			renderer.sprite = m_RoofSprites [random].target;
-*/
 			//proovin pilti loigata
 			int random = Random.Range (0, m_RoofSprites.Count);
 			Sprite roofSprite = m_RoofSprites [random].target;
 			//creating new texture from the sprite(this texture is exactly the size of the image, not 128x128)
-			Texture2D source = new Texture2D((int)roofSprite.rect.width,(int)m_RoofSprites [random].target.rect.height); 
+			Texture2D source = new Texture2D((int)roofSprite.rect.width,(int)roofSprite.rect.height); 
 			source.filterMode = FilterMode.Point; //makes it into pixels. Basically same as TextureFormat truecolor
 
-			Color[] newColors = m_RoofSprites [random].target.texture.GetPixels((int)roofSprite.rect.x, 
+			Color[] newColors = roofSprite.texture.GetPixels((int)roofSprite.rect.x, 
 			                                                                    (int)roofSprite.rect.y, 
 			                                                                    (int)roofSprite.rect.width, 
 			                                                                    (int)roofSprite.rect.height);
@@ -202,30 +191,45 @@ namespace BuildingGen2D
 			int sourceWidth = source.width;
 			//Debug.Log ("Roofe " + newText.height);
 			//Important!! in Rect the values start form the bottom left corner
-			Sprite newSprite = Sprite.Create(source, new Rect(0f, 0f, sourceWidth / 2f, sourceHeight), new Vector2(1f, 1f));
+			Sprite leftRoofTip = Sprite.Create(source, new Rect(0f, 0f, 2f, sourceHeight), new Vector2(0f, 1f));//moving point is in the upper left corner (0,1)
+			GameObject roof_left = new GameObject ("Roof_left_0");
+			SpriteRenderer renderer_l = roof_left.AddComponent<SpriteRenderer> ();
+			renderer_l.sprite = leftRoofTip;
+			roof_left.transform.position = new Vector3 (-building_width / 2f - 2 * onePixelUnit, building_height + onePixelUnit, 0);
+			//roof_left.transform.localScale = new Vector3 (2, 2, 1);
+			roof_left.transform.parent = m_building.transform;
 
-			GameObject go3 = new GameObject ("Roof_0");
-			SpriteRenderer renderer = go3.AddComponent<SpriteRenderer> ();
-			renderer.sprite = newSprite;
-			go3.transform.position = new Vector3 (0, building_height+0.04f, 0);
-			go3.transform.localScale = new Vector3 (2, 2, 1);
-			go3.transform.parent = m_building.transform;
+			//greate texture for middlepart
+			Sprite middlePart = Sprite.Create(source, new Rect(2f, 0f, sourceWidth - 4f, sourceHeight), new Vector2(0f, 1f));//moving point is in the upper left corner
+			//Debug.Log ("-- testing   " + middlePart.rect.width);
+			//creating new texture from the sprite
+			Texture2D middleRoof_texture = new Texture2D((int)middlePart.rect.width,(int)middlePart.rect.height); 
+			middleRoof_texture.filterMode = FilterMode.Point; //makes it into pixels. Basically same as TextureFormat truecolor
+			
+			Color[] middleColors = middlePart.texture.GetPixels((int)middlePart.rect.x, 
+			                                                    (int)middlePart.rect.y, 
+                                                               (int)middlePart.rect.width, 
+                                                               (int)middlePart.rect.height);
+			
+			middleRoof_texture.SetPixels(middleColors);
+			middleRoof_texture.Apply();
 
-			/*for (int i = 0; i < random_length; i++) {
-				
-				GameObject go3 = new GameObject ("Roof_" + i);
-				float x_transformed_beginning = random_length /  -2.0f + 0.5f;
-				go3.transform.position = new Vector3 (x_transformed_beginning + i, building_height, 0);
-				go3.transform.localScale = new Vector3 (-1, 3, 1);
-				 
-				
-				go3.transform.parent = m_building.transform;
-				SpriteRenderer renderer = go3.AddComponent<SpriteRenderer> ();
-				int random = Random.Range (0, m_RoofSprites.Count);
-				renderer.sprite = m_RoofSprites [random].target;
+			//roof middle part generation
 
-				Debug.Log ("Roofe" + random_length);
-			}*/
+			Sprite correctLength_middlePart = Sprite.Create(middleRoof_texture, new Rect(0f, 0f, building_width * pixelsPerUnit, sourceHeight), new Vector2(0f, 1f));
+			GameObject roof_mid = new GameObject ("Roof_mid_0");
+			SpriteRenderer sr = roof_mid.AddComponent<SpriteRenderer> ();
+			sr.sprite = correctLength_middlePart;
+			roof_mid.transform.position = new Vector3 (-building_width / 2f, building_height + onePixelUnit, 0);
+
+			roof_mid.transform.parent = m_building.transform;
+
+			Sprite rightRoofTip = Sprite.Create(source, new Rect(sourceWidth - 2f, 0f, 2, sourceHeight), new Vector2(0f, 1f));//moving point is in the upper left corner (0,1)
+			GameObject roof_right = new GameObject ("Roof_right_0");
+			SpriteRenderer renderer_r = roof_right.AddComponent<SpriteRenderer> ();
+			renderer_r.sprite = rightRoofTip;
+			roof_right.transform.position = new Vector3 (building_width / 2f, building_height + onePixelUnit, 0);
+			roof_right.transform.parent = m_building.transform;
 			
 		}
     }
