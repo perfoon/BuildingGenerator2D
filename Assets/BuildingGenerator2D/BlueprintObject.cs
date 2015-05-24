@@ -16,16 +16,24 @@ namespace AssemblyCSharp
 	[System.Serializable]
 	public class BlueprintObject
 	{
+		private string name;
 		private Sprite sprite;
 		private float x;
 		private float y;
 
 
-		public BlueprintObject (Sprite sprite, float x_location, float y_location)
+		public BlueprintObject (string name, Sprite sprite, float x_location, float y_location)
 		{
+			this.name = name;
 			this.sprite = sprite;
 			x = x_location;
 			y = y_location;
+		}
+
+		public string Name {
+			get {
+				return name;
+			}
 		}
 
 		public Sprite Sprite {

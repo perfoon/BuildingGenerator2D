@@ -146,8 +146,20 @@ namespace BuildingGen2D
 				GenerateRoof(random_length, random_height);
 
 				//maja fassaad
-				Blueprint aknad = new Blueprint("windows",m_WindowSprites);
-				GenerateWalls( aknad, random_length, random_height);
+				List<Blueprint> blueprints = new List<Blueprint>();
+				Blueprint.windowCount = 0;
+				for (int i = 0; i< random_height*random_length;i++) {
+					Blueprint aknad = new Blueprint("windows",m_WindowSprites);
+					blueprints.Add(aknad);
+				}
+				/*Blueprint aknad = new Blueprint("windows",m_WindowSprites);
+				Blueprint aknad2 = new Blueprint("windows",m_WindowSprites);
+				Blueprint aknad3 = new Blueprint("windows",m_WindowSprites);
+				blueprints.Add(aknad);
+				blueprints.Add(aknad2);
+				blueprints.Add(aknad3);*/
+				GenerateWalls( blueprints, random_length, random_height);
+
 
 				//vundament
 				if (Random.Range (0, 2) == 1) {
@@ -256,28 +268,43 @@ namespace BuildingGen2D
 			return source;
 		}
 
-		public void GenerateWalls( Blueprint bp,int building_width, int building_height) {
-			List<BlueprintObject> Objects = bp.getBlueprintObjects();
-			int objCount = Objects.Count;//bp.getBlueprintObjects.Count
-			for (int i = 0; i <  objCount; i++) {
-				Debug.Log ("-- testing" +bp.Type +"   x " + Objects[i].X + " y " + Objects[i].Y);
-				GameObject go = new GameObject (bp.Type + "_" + i);
-				SpriteRenderer renderer = go.AddComponent<SpriteRenderer> ();
-				renderer.sprite = Objects[i].Sprite;
-				float leftUpperCornerX = -building_width /2f;
-				float leftUpperCornerY = building_height *1f;
-				float objX = leftUpperCornerX + Objects[i].X*onePixelUnit; 
-				float objY = leftUpperCornerY - Objects[i].Y*onePixelUnit;
-				go.transform.position = new Vector3 (objX, objY, 0);
-				go.transform.parent = m_building.transform;
-				/*
-				float x_transformed_beginning = random_length /  -2.0f + 0.5f;
+		public void GenerateWalls( List<Blueprint> blueprints,int building_width, int building_height) {
+			int column = 0;
+			int row = 0;
+			for (int j = 0; j < blueprints.Count; j++) { 
+				Blueprint bp = blueprints [j];
+				List<BlueprintObject> Objects = bp.getBlueprintObjects();
+				int objCount = Objects.Count;//bp.getBlueprintObjects.Count
+				for (int i = 0; i <  objCount; i++) {
+					Debug.Log ("-- testing " +Objects[i].Name +"   x " + Objects[i].X + " y " + Objects[i].Y);
+					GameObject go = new GameObject (Objects[i].Name);
+					SpriteRenderer renderer = go.AddComponent<SpriteRenderer> ();
+					renderer.sprite = Objects[i].Sprite;
 
-				
+					float leftUpperCornerX = -building_width /2f + column;
+					float leftUpperCornerY = building_height - row;
+					/*if (building_width - 1 < j) {
+						Debug.Log ("Next row");
+						leftUpperCornerX = -building_width /2f;
+						leftUpperCornerY = building_height - ((j +1) - building_width );
+					} else {
+						leftUpperCornerX = -building_width /2f + j;
+						leftUpperCornerY = building_height *1f;
+					}*/
 
 
-				int random = Random.Range (0, m_GroundSprites.Count);
-				;*/
+					float objX = leftUpperCornerX + Objects[i].X*onePixelUnit; 
+					float objY = leftUpperCornerY - Objects[i].Y*onePixelUnit;
+					go.transform.position = new Vector3 (objX, objY, 0);
+					go.transform.parent = m_building.transform;
+				}
+
+				if (building_width-2 < column) {
+					row += 1;
+					column = 0;
+				} else {
+					column += 1;
+				}
 			}
 		}
     }

@@ -20,6 +20,7 @@ namespace AssemblyCSharp
 		private List<BlueprintObject> objects = new List<BlueprintObject>();
 		private string type;
 		private List<STSpriteInfo> m_sprites;
+		public static int windowCount = 0;
 
 		public Blueprint (string type, List<STSpriteInfo> sprites)
 		{
@@ -52,17 +53,16 @@ namespace AssemblyCSharp
 			for (int i = 0; i < 2; i++) {
 				for (int j = 0; j < 3; j++) {
 					int random = UnityEngine.Random.Range(0, m_sprites.Count);
-					int exists = UnityEngine.Random.Range(0, 2);
-					if (Convert.ToBoolean(exists)) {
+					int exists = UnityEngine.Random.Range(0, 3);
+					if (exists > 0) {
 						//Debug.Log ("-- create window   ");
-						BlueprintObject obj = new BlueprintObject(m_sprites[random].target, 10 + j * 30, 10 + i*40);
+						BlueprintObject obj = new BlueprintObject("window_"+windowCount, m_sprites[random].target, 10 + j * 30, 10 + i*40);
+						windowCount++;
 						objects.Add(obj);
 					}
 				}
 			}
 
-
-		
 		}
 
 
