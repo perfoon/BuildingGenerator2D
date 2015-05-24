@@ -149,11 +149,21 @@ namespace BuildingGen2D
 				Blueprint aknad = new Blueprint("windows",m_WindowSprites);
 				GenerateWalls( aknad, random_length, random_height);
 
+				//vundament
+				if (Random.Range (0, 2) == 1) {
+					GameObject foundation = new GameObject("Foundation");
+					float h = random_height/12f;
+					float w = random_length + onePixelUnit * 2f;
+					foundation.transform.position = new Vector3 (0, h, 0);
+					foundation.transform.parent = m_building.transform;
+					AddRectangleSprite(foundation, new Color32(107, 97, 84, 255), new Color32(53, 47, 45, 255), 1, random_length * 130, random_height * 128 / 6);
+				}
 				//Building wall generation
 				GameObject go2 = new GameObject("Wall");
 				go2.transform.position = new Vector3 (0, random_height/2.0f, 0);
 				go2.transform.parent = m_building.transform;
                 AddRectangleSprite(go2, new Color32(90, 84, 76, 255), new Color32(53, 47, 45, 255), 1, random_length * 128, random_height * 128);
+
 				
 			} else {
 				Debug.Log ("No Sprites Added!! Try Again!");
@@ -170,7 +180,6 @@ namespace BuildingGen2D
 				
 				GameObject go = new GameObject ("Ground_" + i);
 				float x_transformed_beginning = random_length /  -2.0f + 0.5f;
-				go.transform.position = new Vector3 (x_transformed_beginning + i, 0, 0);
 				//to flip it or not decision
 				int posNeg = Random.Range (0, 2);
 				if (posNeg == 0) {
@@ -180,6 +189,7 @@ namespace BuildingGen2D
 				go.transform.parent = m_building.transform;
 				SpriteRenderer renderer = go.AddComponent<SpriteRenderer> ();
 				int random = Random.Range (0, m_GroundSprites.Count);
+				go.transform.position = new Vector3 (x_transformed_beginning + i, (-m_GroundSprites [random].target.rect.height/2f +2)*onePixelUnit , 0);
 				renderer.sprite = m_GroundSprites [random].target;
 			}
 		
