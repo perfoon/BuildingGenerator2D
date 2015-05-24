@@ -180,25 +180,15 @@ namespace BuildingGen2D
 
 		public void GenerateRoof(int building_width, int building_height) {
 
-
-			//proovin pilti loigata
 			int random = Random.Range (0, m_RoofSprites.Count);
 			Sprite roofSprite = m_RoofSprites [random].target;
 			//creating new texture from the sprite(this texture is exactly the size of the image, not 128x128)
-			Texture2D source = new Texture2D((int)roofSprite.rect.width,(int)roofSprite.rect.height); 
-			source.filterMode = FilterMode.Point; //makes it into pixels. Basically same as TextureFormat truecolor
-
-			Color[] newColors = roofSprite.texture.GetPixels((int)roofSprite.rect.x, 
-			                                                                    (int)roofSprite.rect.y, 
-			                                                                    (int)roofSprite.rect.width, 
-			                                                                    (int)roofSprite.rect.height);
-
-			source.SetPixels(newColors);
-			source.Apply();
+			Texture2D source = spriteToTexture (roofSprite);
 
 			int sourceHeight = source.height;
 			int sourceWidth = source.width;
-			//Debug.Log ("Roofe " + newText.height);
+
+			//right side roof edge
 			//Important!! in Rect the values start form the bottom left corner
 			Sprite leftRoofTip = Sprite.Create(source, new Rect(0f, 0f, 2f, sourceHeight), new Vector2(0f, 1f));//moving point is in the upper left corner (0,1)
 			GameObject roof_left = new GameObject ("Roof_left_0");
@@ -208,31 +198,23 @@ namespace BuildingGen2D
 			//roof_left.transform.localScale = new Vector3 (2, 2, 1);
 			roof_left.transform.parent = m_building.transform;
 
+
 			//greate texture for middlepart
 			Sprite middlePart = Sprite.Create(source, new Rect(2f, 0f, sourceWidth - 4f, sourceHeight), new Vector2(0f, 1f));//moving point is in the upper left corner
 			//Debug.Log ("-- testing   " + middlePart.rect.width);
-			//creating new texture from the sprite
-			Texture2D middleRoof_texture = new Texture2D((int)middlePart.rect.width,(int)middlePart.rect.height); 
-			middleRoof_texture.filterMode = FilterMode.Point; //makes it into pixels. Basically same as TextureFormat truecolor
-			
-			Color[] middleColors = middlePart.texture.GetPixels((int)middlePart.rect.x, 
-			                                                    (int)middlePart.rect.y, 
-                                                               (int)middlePart.rect.width, 
-                                                               (int)middlePart.rect.height);
-			
-			middleRoof_texture.SetPixels(middleColors);
-			middleRoof_texture.Apply();
+			//creating new texture from the sprite, then can go 'around' the image from left to right as much is needed
+			Texture2D middleRoof_texture = spriteToTexture (middlePart);
 
 			//roof middle part generation
-
 			Sprite correctLength_middlePart = Sprite.Create(middleRoof_texture, new Rect(0f, 0f, building_width * pixelsPerUnit, sourceHeight), new Vector2(0f, 1f));
 			GameObject roof_mid = new GameObject ("Roof_mid_0");
 			SpriteRenderer sr = roof_mid.AddComponent<SpriteRenderer> ();
 			sr.sprite = correctLength_middlePart;
 			roof_mid.transform.position = new Vector3 (-building_width / 2f, building_height + onePixelUnit, 0);
-
 			roof_mid.transform.parent = m_building.transform;
 
+
+			//right side roof edge
 			Sprite rightRoofTip = Sprite.Create(source, new Rect(sourceWidth - 2f, 0f, 2, sourceHeight), new Vector2(0f, 1f));//moving point is in the upper left corner (0,1)
 			GameObject roof_right = new GameObject ("Roof_right_0");
 			SpriteRenderer renderer_r = roof_right.AddComponent<SpriteRenderer> ();
@@ -240,6 +222,21 @@ namespace BuildingGen2D
 			roof_right.transform.position = new Vector3 (building_width / 2f, building_height + onePixelUnit, 0);
 			roof_right.transform.parent = m_building.transform;
 			
+		}
+
+		private Texture2D spriteToTexture (Sprite sprite) {
+			//creating new texture from the sprite(this texture is exactly the size of the image, not 128x128)
+			Texture2D source = new Texture2D((int)sprite.rect.width,(int)sprite.rect.height); 
+			source.filterMode = FilterMode.Point; //makes it into pixels. Basically same as TextureFormat truecolor
+			
+			Color[] newColors = sprite.texture.GetPixels((int)sprite.rect.x, 
+			                                                 (int)sprite.rect.y, 
+			                                                 (int)sprite.rect.width, 
+			                                                 (int)sprite.rect.height);
+			
+			source.SetPixels(newColors);
+			source.Apply();
+			return source;
 		}
     }
 }
