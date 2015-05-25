@@ -18,8 +18,7 @@ namespace BuildingGen2D
 
         protected void OnEnable()
         {
-            m_BuildingGen = this.target as BuildingGen2D;
-
+			m_BuildingGen = this.target as BuildingGen2D;
             groundSpriteListSelector = ScriptableObject.CreateInstance(typeof(STSpriteListSelector)) as STSpriteListSelector;
             groundSpriteListSelector.Init("Ground sprites", m_BuildingGen.GroundSprites);
 
@@ -35,9 +34,18 @@ namespace BuildingGen2D
             this.serializedObject.Update();
             //EditorGUILayout.PropertyField(this.serializedObject.FindProperty("m_Texture"), new GUIContent("Atlas Texture"));
             //EditorGUILayout.Space();
+			GUILayout.Label ("Building name:", EditorStyles.boldLabel);
+			m_BuildingGen.buildingName = "Building_A";
+			m_BuildingGen.buildingName = EditorGUILayout.TextField ( m_BuildingGen.buildingName);
+
             groundSpriteListSelector.RenderEditor();
 			roofSpriteListSelector.RenderEditor();
 			windowSpriteListSelector.RenderEditor();
+			//m_BuildingGen.windowProbability = 100;//if not changed the value will be this
+			m_BuildingGen.windowProbability = EditorGUILayout.IntSlider("Window probability", m_BuildingGen.windowProbability, 0, 100);
+
+			EditorGUILayout.Separator ();
+			EditorGUILayout.LabelField ("Building size parameters", EditorStyles.boldLabel);
 
 			m_BuildingGen.MinLength = EditorGUILayout.IntSlider("Min Width", m_BuildingGen.MinLength, 1, 10);
 			m_BuildingGen.MaxLength = EditorGUILayout.IntSlider("Max Width", m_BuildingGen.MaxLength, 1, 10);

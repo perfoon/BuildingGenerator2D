@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using ST;
-using AssemblyCSharp;
+
 
 
 #if UNITY_EDITOR
@@ -19,11 +19,16 @@ namespace BuildingGen2D
 		private List<STSpriteInfo> m_WindowSprites = new List<STSpriteInfo>();
 		private GameObject m_building;
 
+		public string buildingName { get; set; }
+
 		public int MinLength { get; set; }
 		public int MaxLength { get; set; }
 
 		public int MinHeight { get; set; }
 		public int MaxHeight { get; set; }
+
+		public int windowProbability { get; set; }
+
 		public static float pixelsPerUnit = 100f;
 		public float onePixelUnit = 1f / pixelsPerUnit;
 
@@ -32,7 +37,7 @@ namespace BuildingGen2D
 
 		public const string LAYER_NAME1 = "TopLayer";
 		public int sortingOrder1 = 1;
-		
+
 		
 		public List<STSpriteInfo> GroundSprites
         {
@@ -159,7 +164,7 @@ namespace BuildingGen2D
 				List<Blueprint> blueprints = new List<Blueprint>();
 				Blueprint.windowCount = 0;
 				for (int i = 0; i< random_height*random_length;i++) {
-					Blueprint aknad = new Blueprint("windows",m_WindowSprites);
+					Blueprint aknad = new Blueprint("windows",m_WindowSprites, windowProbability);
 					blueprints.Add(aknad);
 				}
 				/*Blueprint aknad = new Blueprint("windows",m_WindowSprites);
@@ -178,7 +183,7 @@ namespace BuildingGen2D
 					//float w = random_length + onePixelUnit * 2f;
 					foundation.transform.position = new Vector3 (0, h, 0);
 					foundation.transform.parent = m_building.transform;
-					AddRectangleSprite(foundation, new Color32(107, 97, 84, 255), new Color32(53, 47, 45, 255), 1, random_length * 130, random_height * 64 / 12, LAYER_NAME1, sortingOrder1);
+					AddRectangleSprite(foundation, new Color32(107, 97, 84, 255), new Color32(53, 47, 45, 255), 1, random_length * 130, random_height * 128 / 24, LAYER_NAME1, sortingOrder1);
 				}
 
 				//Building wall generation

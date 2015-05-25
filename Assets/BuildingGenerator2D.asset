@@ -11,4 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e89f33863cd95c74db8ce0e9387f805d, type: 3}
   m_Name: BuildingGenerator2D
   m_EditorClassIdentifier: 
-  m_Sprites: []
+  m_GroundSprites: []
+  onePixelUnit: .00999999978
+  sortingOrderO: 0
+  sortingOrder1: 1

@@ -11,7 +11,7 @@ using System;
 using UnityEngine;
 
 
-namespace AssemblyCSharp
+namespace BuildingGen2D
 {
 	[System.Serializable]
 	public class BlueprintObject

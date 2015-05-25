@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using ST;
 
-namespace AssemblyCSharp
+namespace BuildingGen2D
 {
 	[System.Serializable]
 	public class Blueprint
@@ -21,16 +21,19 @@ namespace AssemblyCSharp
 		private string type;
 		private List<STSpriteInfo> m_sprites;
 		public static int windowCount = 0;
+		public int windowProb { get; set; }
 
-		public Blueprint (string type, List<STSpriteInfo> sprites)
+		public Blueprint (string type, List<STSpriteInfo> sprites, int probability)
 		{
 			this.m_sprites = sprites;
 			if (type == "windows") {
+				this.windowProb = probability;
 				createWindowsBp();
 
 			}
 			this.type = type;
 		}
+
 
 		public void addBlueprintOject(BlueprintObject bpo) {
 			objects.Add (bpo);
@@ -53,8 +56,11 @@ namespace AssemblyCSharp
 			for (int i = 0; i < 2; i++) {
 				for (int j = 0; j < 3; j++) {
 					int random = UnityEngine.Random.Range(0, m_sprites.Count);
-					int exists = UnityEngine.Random.Range(0, 3);
-					if (exists > 0) {
+					int exists = UnityEngine.Random.Range(0, 101);
+					int probability = windowProb;
+					Debug.Log ("-- window prob   " + probability);
+					//int probability = 60;
+					if (exists <= probability && probability != 0) {
 						//Debug.Log ("-- create window   ");
 						BlueprintObject obj = new BlueprintObject("window_"+windowCount, m_sprites[random].target, 10 + j * 30, 10 + i*40);
 						windowCount++;
