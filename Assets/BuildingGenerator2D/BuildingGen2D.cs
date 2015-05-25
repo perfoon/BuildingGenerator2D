@@ -35,8 +35,8 @@ namespace BuildingGen2D
 		public static float pixelsPerUnit = 100f;
 		public float onePixelUnit = 1f / pixelsPerUnit;
 
-		public const string LAYER_NAMEO = "BottomLayer";
-		public int sortingOrderO = 0;
+		public const string LAYER_NAME0 = "BottomLayer";
+		public int sortingOrder0 = 0;
 
 		public const string LAYER_NAME1 = "TopLayer";
 		public int sortingOrder1 = 1;
@@ -155,7 +155,7 @@ namespace BuildingGen2D
 
 		public void GenerateBuilding() {
 
-			if (m_GroundSprites.Count != 0 && m_RoofSprites.Count != 0 && m_WindowSprites.Count != 0 && m_LadderSprites.Count != 0) {
+			if (buildingName != "" && m_GroundSprites.Count != 0 && m_RoofSprites.Count != 0 && m_WindowSprites.Count != 0 && m_LadderSprites.Count != 0) {
 				if (m_building == null || GameObject.Find (buildingName) == null) { //m_building.name
 					//m_building = new GameObject ("Building");
 					m_building = new GameObject (buildingName);
@@ -211,10 +211,11 @@ namespace BuildingGen2D
 				GameObject go2 = new GameObject("Wall");
 				go2.transform.position = new Vector3 (0, random_height/2.0f, 0);
 				go2.transform.parent = m_building.transform;
-                AddRectangleSprite(go2, new Color32(90, 84, 76, 255), new Color32(53, 47, 45, 255), 1, random_length * 128, random_height * 128, LAYER_NAMEO, sortingOrderO);
+                AddRectangleSprite(go2, new Color32(90, 84, 76, 255), new Color32(53, 47, 45, 255), 1, random_length * 128, random_height * 128, LAYER_NAME1, sortingOrder0);
 
 
 				m_building.transform.position = new Vector3 (buildingX, buildingY, 0);
+
 				
 			} else {
 				Debug.Log ("No Sprites Added!! Try Again!");
