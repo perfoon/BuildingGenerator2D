@@ -27,8 +27,14 @@ namespace BuildingGen2D
 		public static float pixelsPerUnit = 100f;
 		public float onePixelUnit = 1f / pixelsPerUnit;
 
+		public const string LAYER_NAMEO = "BottomLayer";
+		public int sortingOrderO = 0;
 
-        public List<STSpriteInfo> GroundSprites
+		public const string LAYER_NAME1 = "TopLayer";
+		public int sortingOrder1 = 1;
+		
+		
+		public List<STSpriteInfo> GroundSprites
         {
             get
             {
@@ -99,8 +105,8 @@ namespace BuildingGen2D
             }
         }
 
-        public void AddRectangleSprite(GameObject gameObject, Color32 color, Color32 borderColor, int borderWidth, int width, int height)
-        {
+		public void AddRectangleSprite(GameObject gameObject, Color32 color, Color32 borderColor, int borderWidth, int width, int height, string LAYER_NAME, int sortingOrder)
+		{
 			
 			Texture2D texture = new Texture2D(width, height, TextureFormat.RGB24, false, true);
 			texture.filterMode = FilterMode.Point;
@@ -124,6 +130,10 @@ namespace BuildingGen2D
 
 			gameObject.AddComponent<SpriteRenderer>();
 			SpriteRenderer sprRenderer = gameObject.GetComponent<SpriteRenderer>();
+
+			sprRenderer.sortingOrder = sortingOrder;
+			sprRenderer.sortingLayerName = LAYER_NAME;
+			
 			sprRenderer.sprite = newSprite;
 		}
 
@@ -164,17 +174,18 @@ namespace BuildingGen2D
 				//vundament
 				if (Random.Range (0, 2) == 1) {
 					GameObject foundation = new GameObject("Foundation");
-					float h = random_height/12f;
-					float w = random_length + onePixelUnit * 2f;
+					float h = random_height/48f;
+					//float w = random_length + onePixelUnit * 2f;
 					foundation.transform.position = new Vector3 (0, h, 0);
 					foundation.transform.parent = m_building.transform;
-					AddRectangleSprite(foundation, new Color32(107, 97, 84, 255), new Color32(53, 47, 45, 255), 1, random_length * 130, random_height * 128 / 6);
+					AddRectangleSprite(foundation, new Color32(107, 97, 84, 255), new Color32(53, 47, 45, 255), 1, random_length * 130, random_height * 64 / 12, LAYER_NAME1, sortingOrder1);
 				}
+
 				//Building wall generation
 				GameObject go2 = new GameObject("Wall");
 				go2.transform.position = new Vector3 (0, random_height/2.0f, 0);
 				go2.transform.parent = m_building.transform;
-                AddRectangleSprite(go2, new Color32(90, 84, 76, 255), new Color32(53, 47, 45, 255), 1, random_length * 128, random_height * 128);
+                AddRectangleSprite(go2, new Color32(90, 84, 76, 255), new Color32(53, 47, 45, 255), 1, random_length * 128, random_height * 128, LAYER_NAMEO, sortingOrderO);
 
 				
 			} else {
@@ -200,6 +211,8 @@ namespace BuildingGen2D
 				
 				go.transform.parent = m_building.transform;
 				SpriteRenderer renderer = go.AddComponent<SpriteRenderer> ();
+				renderer.sortingOrder = sortingOrder1;
+				renderer.sortingLayerName = LAYER_NAME1;
 				int random = Random.Range (0, m_GroundSprites.Count);
 				go.transform.position = new Vector3 (x_transformed_beginning + i, (-m_GroundSprites [random].target.rect.height/2f +2)*onePixelUnit , 0);
 				renderer.sprite = m_GroundSprites [random].target;
@@ -222,6 +235,8 @@ namespace BuildingGen2D
 			Sprite leftRoofTip = Sprite.Create(source, new Rect(0f, 0f, 2f, sourceHeight), new Vector2(0f, 1f));//moving point is in the upper left corner (0,1)
 			GameObject roof_left = new GameObject ("Roof_left_0");
 			SpriteRenderer renderer_l = roof_left.AddComponent<SpriteRenderer> ();
+			renderer_l.sortingOrder = sortingOrder1;
+			renderer_l.sortingLayerName = LAYER_NAME1;
 			renderer_l.sprite = leftRoofTip;
 			roof_left.transform.position = new Vector3 (-building_width / 2f - 2 * onePixelUnit, building_height + onePixelUnit, 0);
 			//roof_left.transform.localScale = new Vector3 (2, 2, 1);
@@ -238,6 +253,8 @@ namespace BuildingGen2D
 			Sprite correctLength_middlePart = Sprite.Create(middleRoof_texture, new Rect(0f, 0f, building_width * pixelsPerUnit, sourceHeight), new Vector2(0f, 1f));
 			GameObject roof_mid = new GameObject ("Roof_mid_0");
 			SpriteRenderer sr = roof_mid.AddComponent<SpriteRenderer> ();
+			sr.sortingOrder = sortingOrder1;
+			sr.sortingLayerName = LAYER_NAME1;
 			sr.sprite = correctLength_middlePart;
 			roof_mid.transform.position = new Vector3 (-building_width / 2f, building_height + onePixelUnit, 0);
 			roof_mid.transform.parent = m_building.transform;
@@ -247,6 +264,8 @@ namespace BuildingGen2D
 			Sprite rightRoofTip = Sprite.Create(source, new Rect(sourceWidth - 2f, 0f, 2, sourceHeight), new Vector2(0f, 1f));//moving point is in the upper left corner (0,1)
 			GameObject roof_right = new GameObject ("Roof_right_0");
 			SpriteRenderer renderer_r = roof_right.AddComponent<SpriteRenderer> ();
+			renderer_r.sortingOrder = sortingOrder1;
+			renderer_r.sortingLayerName = LAYER_NAME1;
 			renderer_r.sprite = rightRoofTip;
 			roof_right.transform.position = new Vector3 (building_width / 2f, building_height + onePixelUnit, 0);
 			roof_right.transform.parent = m_building.transform;
@@ -279,6 +298,10 @@ namespace BuildingGen2D
 					Debug.Log ("-- testing " +Objects[i].Name +"   x " + Objects[i].X + " y " + Objects[i].Y);
 					GameObject go = new GameObject (Objects[i].Name);
 					SpriteRenderer renderer = go.AddComponent<SpriteRenderer> ();
+
+					renderer.sortingOrder = sortingOrder1;
+					renderer.sortingLayerName = LAYER_NAME1;
+
 					renderer.sprite = Objects[i].Sprite;
 
 					float leftUpperCornerX = -building_width /2f + column;
