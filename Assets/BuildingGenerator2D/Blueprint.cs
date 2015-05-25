@@ -20,6 +20,7 @@ namespace BuildingGen2D
 		private List<BlueprintObject> objects = new List<BlueprintObject>();
 		private string type;
 		private List<STSpriteInfo> m_sprites;
+		private List<STSpriteInfo> m_sprites2;
 		public static int windowCount = 0;
 		public int windowProb { get; set; }
 
@@ -30,8 +31,20 @@ namespace BuildingGen2D
 				this.windowProb = probability;
 				createWindowsBp();
 
-			}
+			} 
 			this.type = type;
+		}
+
+		public Blueprint (string type1, List<STSpriteInfo> sprites1, int probability, string type2, List<STSpriteInfo> sprites2 )
+		{
+			this.m_sprites = sprites1;
+			this.m_sprites2 = sprites2;
+			if (type1 == "windows" && type2 == "ladders") {
+				this.windowProb = probability;
+				//createLadderWindowsBp();
+				
+			}
+
 		}
 
 

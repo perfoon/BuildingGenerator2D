@@ -17,9 +17,12 @@ namespace BuildingGen2D
         private List<STSpriteInfo> m_GroundSprites = new List<STSpriteInfo>();
 		private List<STSpriteInfo> m_RoofSprites = new List<STSpriteInfo>();
 		private List<STSpriteInfo> m_WindowSprites = new List<STSpriteInfo>();
+		private List<STSpriteInfo> m_LadderSprites = new List<STSpriteInfo>();
 		private GameObject m_building;
 
 		public string buildingName { get; set; }
+		public float buildingX { get; set; }
+		public float buildingY { get; set; }
 
 		public int MinLength { get; set; }
 		public int MaxLength { get; set; }
@@ -60,6 +63,14 @@ namespace BuildingGen2D
 			get
 			{
 				return this.m_WindowSprites;
+			}
+		}
+
+		public List<STSpriteInfo> LadderSprites
+		{
+			get
+			{
+				return this.m_LadderSprites;
 			}
 		}
 		
@@ -144,14 +155,17 @@ namespace BuildingGen2D
 
 		public void GenerateBuilding() {
 
-			if (m_GroundSprites.Count != 0 && m_RoofSprites.Count != 0 && m_WindowSprites.Count != 0) {
-				if (m_building == null || GameObject.Find (m_building.name) == null) {
-					m_building = new GameObject ("Building");
+			if (m_GroundSprites.Count != 0 && m_RoofSprites.Count != 0 && m_WindowSprites.Count != 0 && m_LadderSprites.Count != 0) {
+				if (m_building == null || GameObject.Find (buildingName) == null) { //m_building.name
+					//m_building = new GameObject ("Building");
+					m_building = new GameObject (buildingName);
 				} else {
-					GameObject.DestroyImmediate (GameObject.Find (m_building.name));
+					GameObject.DestroyImmediate (GameObject.Find (buildingName)); //m_building.name
 					Debug.Log ("deleted gameobject ");
-					m_building = new GameObject ("Building");
+					//m_building = new GameObject ("Building");
+					m_building = new GameObject (buildingName);
 				}
+
 				int random_length = Random.Range (MinLength, MaxLength + 1);
 				int random_height = Random.Range (MinHeight, MaxHeight + 1);
 				//Ground generation
@@ -163,9 +177,16 @@ namespace BuildingGen2D
 				//maja fassaad
 				List<Blueprint> blueprints = new List<Blueprint>();
 				Blueprint.windowCount = 0;
+				int nextLadderPos = -1;
 				for (int i = 0; i< random_height*random_length;i++) {
-					Blueprint aknad = new Blueprint("windows",m_WindowSprites, windowProbability);
-					blueprints.Add(aknad);
+
+					if ( i == nextLadderPos) {
+						Blueprint bp = new Blueprint("windows",m_WindowSprites, windowProbability, "ladders",m_LadderSprites);
+						blueprints.Add(bp);
+					} else {
+						Blueprint aknad = new Blueprint("windows",m_WindowSprites, windowProbability);
+						blueprints.Add(aknad);
+					}
 				}
 				/*Blueprint aknad = new Blueprint("windows",m_WindowSprites);
 				Blueprint aknad2 = new Blueprint("windows",m_WindowSprites);
@@ -192,6 +213,8 @@ namespace BuildingGen2D
 				go2.transform.parent = m_building.transform;
                 AddRectangleSprite(go2, new Color32(90, 84, 76, 255), new Color32(53, 47, 45, 255), 1, random_length * 128, random_height * 128, LAYER_NAMEO, sortingOrderO);
 
+
+				m_building.transform.position = new Vector3 (buildingX, buildingY, 0);
 				
 			} else {
 				Debug.Log ("No Sprites Added!! Try Again!");
@@ -293,6 +316,7 @@ namespace BuildingGen2D
 		}
 
 		public void GenerateWalls( List<Blueprint> blueprints,int building_width, int building_height) {
+			//blueprint object points are located in the upper left corner
 			int column = 0;
 			int row = 0;
 			for (int j = 0; j < blueprints.Count; j++) { 
@@ -311,15 +335,6 @@ namespace BuildingGen2D
 
 					float leftUpperCornerX = -building_width /2f + column;
 					float leftUpperCornerY = building_height - row;
-					/*if (building_width - 1 < j) {
-						Debug.Log ("Next row");
-						leftUpperCornerX = -building_width /2f;
-						leftUpperCornerY = building_height - ((j +1) - building_width );
-					} else {
-						leftUpperCornerX = -building_width /2f + j;
-						leftUpperCornerY = building_height *1f;
-					}*/
-
 
 					float objX = leftUpperCornerX + Objects[i].X*onePixelUnit; 
 					float objY = leftUpperCornerY - Objects[i].Y*onePixelUnit;
