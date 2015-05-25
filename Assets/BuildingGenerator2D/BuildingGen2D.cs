@@ -177,23 +177,23 @@ namespace BuildingGen2D
 				//maja fassaad
 				List<Blueprint> blueprints = new List<Blueprint>();
 				Blueprint.windowCount = 0;
-				int nextLadderPos = -1;
-				for (int i = 0; i< random_height*random_length;i++) {
+				Blueprint.ladderCount = 0;
 
-					if ( i == nextLadderPos) {
-						Blueprint bp = new Blueprint("windows",m_WindowSprites, windowProbability, "ladders",m_LadderSprites);
+				List<int> nextLadder = new List<int>();
+				for (int i = 0; i < random_height*random_length;i++) {
+					int rand = Random.Range (0, random_length);
+					if ( i == rand || nextLadder.Contains(i)) {
+						Blueprint bp = new Blueprint("windows",m_WindowSprites, windowProbability, "ladders", m_LadderSprites);
 						blueprints.Add(bp);
+						nextLadder.Add(i + random_length);
 					} else {
+
 						Blueprint aknad = new Blueprint("windows",m_WindowSprites, windowProbability);
 						blueprints.Add(aknad);
+
 					}
 				}
-				/*Blueprint aknad = new Blueprint("windows",m_WindowSprites);
-				Blueprint aknad2 = new Blueprint("windows",m_WindowSprites);
-				Blueprint aknad3 = new Blueprint("windows",m_WindowSprites);
-				blueprints.Add(aknad);
-				blueprints.Add(aknad2);
-				blueprints.Add(aknad3);*/
+
 				GenerateWalls( blueprints, random_length, random_height);
 
 
@@ -324,7 +324,7 @@ namespace BuildingGen2D
 				List<BlueprintObject> Objects = bp.getBlueprintObjects();
 				int objCount = Objects.Count;//bp.getBlueprintObjects.Count
 				for (int i = 0; i <  objCount; i++) {
-					Debug.Log ("-- testing " +Objects[i].Name +"   x " + Objects[i].X + " y " + Objects[i].Y);
+					//Debug.Log ("-- testing " +Objects[i].Name +"   x " + Objects[i].X + " y " + Objects[i].Y);
 					GameObject go = new GameObject (Objects[i].Name);
 					SpriteRenderer renderer = go.AddComponent<SpriteRenderer> ();
 

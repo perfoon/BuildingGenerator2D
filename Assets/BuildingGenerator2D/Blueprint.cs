@@ -22,6 +22,7 @@ namespace BuildingGen2D
 		private List<STSpriteInfo> m_sprites;
 		private List<STSpriteInfo> m_sprites2;
 		public static int windowCount = 0;
+		public static int ladderCount = 0;
 		public int windowProb { get; set; }
 
 		public Blueprint (string type, List<STSpriteInfo> sprites, int probability)
@@ -41,7 +42,7 @@ namespace BuildingGen2D
 			this.m_sprites2 = sprites2;
 			if (type1 == "windows" && type2 == "ladders") {
 				this.windowProb = probability;
-				//createLadderWindowsBp();
+				createLadderWindowsBp();
 				
 			}
 
@@ -71,7 +72,7 @@ namespace BuildingGen2D
 					int random = UnityEngine.Random.Range(0, m_sprites.Count);
 					int exists = UnityEngine.Random.Range(0, 101);
 					int probability = windowProb;
-					Debug.Log ("-- window prob   " + probability);
+					//Debug.Log ("-- window prob   " + probability);
 					//int probability = 60;
 					if (exists <= probability && probability != 0) {
 						//Debug.Log ("-- create window   ");
@@ -82,6 +83,30 @@ namespace BuildingGen2D
 				}
 			}
 
+		}
+
+		private void createLadderWindowsBp() {
+
+			for (int i = 0; i < 2; i++) {
+				for (int j = 0; j < 3; j++) {
+					int random = UnityEngine.Random.Range(0, m_sprites.Count);
+					int random2 = UnityEngine.Random.Range(0, m_sprites2.Count);
+					int exists = UnityEngine.Random.Range(0, 101);
+					int probability = windowProb;
+					//int probability = 60;
+					if ( j == 1) {
+						BlueprintObject obj = new BlueprintObject("ladder_" + windowCount, m_sprites2[random2].target, 10 + j * 30, i*50);
+						ladderCount++;
+						objects.Add(obj);
+					} else if (exists <= probability && probability != 0) {
+						//Debug.Log ("-- create window   ");
+						BlueprintObject obj = new BlueprintObject("window_" + windowCount, m_sprites[random].target, 10 + j * 30, 10 + i*40);
+						windowCount++;
+						objects.Add(obj);
+					}
+				}
+			}
+			
 		}
 
 
