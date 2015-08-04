@@ -279,14 +279,21 @@ namespace BuildingGen2D
 			Texture2D middleRoof_texture = spriteToTexture (middlePart);
 
 			//roof middle part generation
-			Sprite correctLength_middlePart = Sprite.Create(middleRoof_texture, new Rect(0f, 0f, building_width * pixelsPerUnit, sourceHeight), new Vector2(0f, 1f));
-			GameObject roof_mid = new GameObject ("Roof_mid_0");
-			SpriteRenderer sr = roof_mid.AddComponent<SpriteRenderer> ();
-			sr.sortingOrder = sortingOrder1;
-			sr.sortingLayerName = LAYER_NAME1;
-			sr.sprite = correctLength_middlePart;
-			roof_mid.transform.position = new Vector3 (-building_width / 2f, building_height + onePixelUnit, 0);
-			roof_mid.transform.parent = m_building.transform;
+			Sprite correctLength_middlePart = Sprite.Create(middleRoof_texture, new Rect(0f, 0f, sourceWidth - 4f, sourceHeight), new Vector2(0f, 1f));
+
+			for (int leftX = 0; leftX < building_width; leftX += 1) {
+				if (leftX == building_width - 1) {
+					correctLength_middlePart = Sprite.Create (middleRoof_texture, new Rect (0f, 0f, sourceWidth - (sourceWidth % pixelsPerUnit), sourceHeight), new Vector2 (0f, 1f));
+					Debug.Log ("Width: " + (sourceWidth - (sourceWidth % pixelsPerUnit)));
+				}
+				GameObject roof_mid = new GameObject ("Roof_mid_" + leftX);
+				SpriteRenderer sr = roof_mid.AddComponent<SpriteRenderer> ();
+				sr.sortingOrder = sortingOrder1;
+				sr.sortingLayerName = LAYER_NAME1;
+				sr.sprite = correctLength_middlePart;
+				roof_mid.transform.position = new Vector3 (leftX - building_width / 2f, building_height + onePixelUnit, 0);
+				roof_mid.transform.parent = m_building.transform;	
+			}
 
 
 			//right side roof edge
